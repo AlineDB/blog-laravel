@@ -33,6 +33,8 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['name', 'slug'];
+
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class);

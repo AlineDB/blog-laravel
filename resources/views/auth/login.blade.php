@@ -55,19 +55,27 @@
                         @csrf
 
                         <label for="email"
-                               class="block mb-2">Email</label>
+                               class="block mb-2 @error('email') text-red-600 @enderror">Email</label>
+                        @error('email')
+                        <div class="text-red-600">{{ $message }}</div>
+                        @enderror
                         <input id="email"
                                type="text"
                                name="email"
-                               class="w-full rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                               class="w-full rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                               value="{{old('email')}}">
 
                         <label for="password"
-                               class="block mt-8 mb-2">Password</label>
+                               class="block mt-8 mb-2 @error('password') text-red-600 @enderror">Password</label>
+                        @error('password')
+                        <div class="text-red-600">{{ $message }}</div>
+                        @enderror
                         <input name="password"
                                type="password"
                                id="password"
                                rows="5"
-                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                               value="{{old('password')}}"
+                               class="w-full @error('password') outline outline-red-400 @enderror rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         <button type="submit"
                                 class="float-right mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
                             Login

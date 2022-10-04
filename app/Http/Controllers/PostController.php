@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -25,22 +27,33 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+
+    public function store(StorePostRequest $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $validatedPostData = $request->safe()->only('title', 'body', 'excerpt');
+        $validatedPostData['slug'] = Str::slug($validatedPostData['title']);
+        $validatedPostData['user_id'] = auth()->id();
+        $validatedCategoryId = $request->safe()->only('category_id');
+
+        $post = Post::create($validatedPostData);
+        foreach ($validatedCategoryId as $id){
+            $post->categories()->attach($id);
+        }
+
+        return redirect()->route('single-post' , [$post]);
     }
 
     /**
